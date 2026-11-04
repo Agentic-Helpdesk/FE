@@ -1,5 +1,7 @@
+import {Login} from '../features/login'
+
 function LoginPage() {
-  return <div>LoginPage</div>
+    return <Login/>
 }
 
 export default LoginPage

@@ -1,5 +1,7 @@
+import {Join} from '../features/join'
+
 function JoinPage() {
-    return <div>JoinPage</div>
+    return <Join/>
 }
 
 export default JoinPage
