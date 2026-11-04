@@ -35,7 +35,7 @@
 |---|---|
 | 커스텀 훅은 `use` 접두사 | `useTicketList()` |
 | 고차 컴포넌트는 `with` 접두사 | `withAuth()` |
-| 이벤트 핸들러는 `handle` 접두사 + 이벤트 유형 접미사 | `handleLoginButtonClick` |
+| 이벤트 핸들러는 `handle` 접두사 + 이벤트 유형 접미사 | `handleLoginClick` |
 | Context는 `Context` 접미사 | `AuthContext` |
 | Context 훅은 `Context` 접미사 | `useAuthContext()` |
 | Provider 컴포넌트는 `Provider` 접미사 | `AuthContextProvider` |
