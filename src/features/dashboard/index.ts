@@ -1,1 +1,1 @@
-// 통계 차트, 요약 카드
+export {default as Dashboard} from './components/Dashboard'
