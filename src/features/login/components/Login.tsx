@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import * as S from './Login.styles'
 
-const APP_NAME = 'HelpDesk Pro'
+import {APP_NAME} from '../../../shared/constants/app'
 
 function Login() {
     const navigate = useNavigate()

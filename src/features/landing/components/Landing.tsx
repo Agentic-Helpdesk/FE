@@ -2,7 +2,7 @@ import {useNavigate} from 'react-router-dom'
 import * as S from './Landing.styles'
 import logoSvg from '../../../assets/helpdesk-pro-logo.svg'
 
-const APP_NAME = 'HelpDesk Pro'
+import {APP_NAME} from '../../../shared/constants/app'
 
 type StatusType = '접수' | '처리중' | '완료'
 

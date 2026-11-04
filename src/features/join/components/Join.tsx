@@ -1,7 +1,7 @@
 import {useNavigate} from 'react-router-dom'
 import * as S from './Join.styles'
 
-const APP_NAME = 'HelpDesk Pro'
+import {APP_NAME} from '../../../shared/constants/app'
 
 type FieldItemType = {
     label: string
