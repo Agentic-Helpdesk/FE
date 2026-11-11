@@ -113,6 +113,7 @@ export const CardTitle = styled.h2`
     font-size: 1rem;
     font-weight: 700;
     color: #111827;
+    white-space: nowrap;
 `
 
 export const CardLinkBtn = styled.button`
@@ -124,6 +125,34 @@ export const CardLinkBtn = styled.button`
 
     &:hover {
         text-decoration: underline;
+    }
+`
+
+export const CalendarNav = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+`
+
+export const CalendarNavBtn = styled.button`
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: none;
+    font-size: 1.125rem;
+    color: #6b7280;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.1s;
+
+    &:hover {
+        background: #f3f4f6;
+        color: #111827;
     }
 `
 
@@ -141,19 +170,23 @@ export const CalendarDayName = styled.div`
     padding: 4px 0;
 `
 
-export const CalendarDay = styled.div<{ $isToday?: boolean }>`
+export const CalendarDay = styled.div<{$isToday?: boolean; $isSelected?: boolean}>`
     position: relative;
     padding: 6px 0;
     border-radius: 8px;
     font-size: 0.875rem;
     cursor: pointer;
     transition: background 0.1s;
-    background: ${({$isToday}) => $isToday ? PRIMARY : 'transparent'};
-    color: ${({$isToday}) => $isToday ? '#fff' : '#374151'};
-    font-weight: ${({$isToday}) => $isToday ? '700' : '400'};
+    background: ${({$isToday, $isSelected}) =>
+        $isToday ? PRIMARY : $isSelected ? '#eef2ff' : 'transparent'};
+    color: ${({$isToday, $isSelected}) =>
+        $isToday ? '#fff' : $isSelected ? PRIMARY : '#374151'};
+    font-weight: ${({$isToday, $isSelected}) =>
+        $isToday || $isSelected ? '700' : '400'};
 
     &:hover {
-        background: ${({$isToday}) => $isToday ? PRIMARY : '#f9fafb'};
+        background: ${({$isToday, $isSelected}) =>
+            $isToday ? PRIMARY : $isSelected ? '#eef2ff' : '#f9fafb'};
     }
 `
 
@@ -296,4 +329,11 @@ export const AssignTicketDate = styled.span`
     font-size: 0.75rem;
     color: #9ca3af;
     flex-shrink: 0;
+`
+
+export const EmptyText = styled.p`
+    font-size: 0.875rem;
+    color: #9ca3af;
+    text-align: center;
+    padding: 20px 0;
 `

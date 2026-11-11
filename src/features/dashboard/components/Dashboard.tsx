@@ -18,13 +18,27 @@ function Dashboard() {
     const [ticketList, setTicketList] = useState<TicketType[]>([])
     const [assignedTicketList, setAssignedTicketList] = useState<TicketType[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [selectedDay, setSelectedDay] = useState<number | null>(null)
 
     const now = new Date()
-    const year = now.getFullYear()
-    const month = now.getMonth()
+    const [calYear, setCalYear] = useState(now.getFullYear())
+    const [calMonth, setCalMonth] = useState(now.getMonth())
     const today = now.getDate()
-    const daysInMonth = new Date(year, month + 1, 0).getDate()
-    const firstDayOfWeek = new Date(year, month, 1).getDay()
+    const year = calYear
+    const month = calMonth
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate()
+    const firstDayOfWeek = new Date(calYear, calMonth, 1).getDay()
+
+    const handlePrevMonthClick = () => {
+        setSelectedDay(null)
+        if (calMonth === 0) { setCalYear((y) => y - 1); setCalMonth(11) }
+        else setCalMonth((m) => m - 1)
+    }
+    const handleNextMonthClick = () => {
+        setSelectedDay(null)
+        if (calMonth === 11) { setCalYear((y) => y + 1); setCalMonth(0) }
+        else setCalMonth((m) => m + 1)
+    }
 
     useEffect(() => {
         Promise.all([getTickets(), getAssignedTickets()])
@@ -35,8 +49,16 @@ function Dashboard() {
             .finally(() => setIsLoading(false))
     }, [])
 
-    const myTicketList = ticketList.slice(0, 5)
+    const filteredTicketList = selectedDay === null
+        ? ticketList.slice(0, 5)
+        : ticketList.filter((t) => {
+            const d = new Date(t.created_at)
+            return d.getFullYear() === year && d.getMonth() === month && d.getDate() === selectedDay
+        })
     const assignTicketList = assignedTicketList.slice(0, 3)
+
+    const handleCalendarDayClick = (day: number) =>
+        setSelectedDay((prev) => (prev === day ? null : day))
 
     const statList = [
         {label: '접수', count: ticketList.filter((t) => t.status === 'received').length, bgColor: '#f1f5f9', textColor: '#475569'},
@@ -45,7 +67,12 @@ function Dashboard() {
         {label: '전체', count: ticketList.length, bgColor: '#ede9fe', textColor: '#5b21b6'},
     ]
 
-    const ticketDayList = ticketList.map((t) => new Date(t.created_at).getDate())
+    const ticketDayList = ticketList
+        .filter((t) => {
+            const d = new Date(t.created_at)
+            return d.getFullYear() === year && d.getMonth() === month
+        })
+        .map((t) => new Date(t.created_at).getDate())
 
     const handleNewTicketClick = () => navigate('/tickets/new')
     const handleTicketClick = (id: string) => navigate(`/tickets/${id}`)
@@ -77,7 +104,16 @@ function Dashboard() {
 
                 <S.ContentGrid>
                     <S.Card>
-                        <S.CardTitle>{calendarLabel}</S.CardTitle>
+                        <S.CardHeader>
+                            <S.CalendarNav>
+                                <S.CalendarNavBtn onClick={handlePrevMonthClick}>‹</S.CalendarNavBtn>
+                                <S.CardTitle>{calendarLabel}</S.CardTitle>
+                                <S.CalendarNavBtn onClick={handleNextMonthClick}>›</S.CalendarNavBtn>
+                            </S.CalendarNav>
+                            {selectedDay && (
+                                <S.CardLinkBtn onClick={() => setSelectedDay(null)}>✕ 해제</S.CardLinkBtn>
+                            )}
+                        </S.CardHeader>
                         <S.CalendarDayList style={{marginTop: 16, marginBottom: 8}}>
                             {DAY_NAME_LIST.map((d) => (
                                 <S.CalendarDayName key={d}>{d}</S.CalendarDayName>
@@ -91,10 +127,16 @@ function Dashboard() {
                                 const day = i + 1
                                 const isToday = day === today
                                 const hasTicket = ticketDayList.includes(day)
+                                const isSelected = selectedDay === day
                                 return (
-                                    <S.CalendarDay key={day} $isToday={isToday}>
+                                    <S.CalendarDay
+                                        key={day}
+                                        $isToday={isToday}
+                                        $isSelected={isSelected}
+                                        onClick={() => handleCalendarDayClick(day)}
+                                    >
                                         {day}
-                                        {hasTicket && !isToday && <S.CalendarDot/>}
+                                        {hasTicket && !isToday && !isSelected && <S.CalendarDot/>}
                                     </S.CalendarDay>
                                 )
                             })}
@@ -103,23 +145,31 @@ function Dashboard() {
 
                     <S.Card>
                         <S.CardHeader>
-                            <S.CardTitle>내가 요청한 티켓</S.CardTitle>
-                            <S.CardLinkBtn onClick={handleAllTicketClick}>전체 보기</S.CardLinkBtn>
+                            <S.CardTitle>
+                                {selectedDay ? `${month + 1}월 ${selectedDay}일 티켓` : '내가 요청한 티켓'}
+                            </S.CardTitle>
+                            {!selectedDay && (
+                                <S.CardLinkBtn onClick={handleAllTicketClick}>전체 보기</S.CardLinkBtn>
+                            )}
                         </S.CardHeader>
-                        <S.TicketList>
-                            {myTicketList.map((ticket) => (
-                                <S.TicketRow key={ticket.id} onClick={() => handleTicketClick(ticket.id)}>
-                                    <S.TicketMeta>
-                                        <S.TicketMetaRow>
-                                            <S.TicketId>{ticket.id}</S.TicketId>
-                                            <S.TicketDate>{ticket.created_at.slice(0, 10)}</S.TicketDate>
-                                        </S.TicketMetaRow>
-                                        <S.TicketTitle>{ticket.title}</S.TicketTitle>
-                                    </S.TicketMeta>
-                                    <StatusBadge status={STATUS_LABEL[ticket.status] ?? ticket.status}/>
-                                </S.TicketRow>
-                            ))}
-                        </S.TicketList>
+                        {isLoading ? null : filteredTicketList.length === 0 ? (
+                            <S.EmptyText>해당 날짜 티켓 없음</S.EmptyText>
+                        ) : (
+                            <S.TicketList>
+                                {filteredTicketList.map((ticket) => (
+                                    <S.TicketRow key={ticket.id} onClick={() => handleTicketClick(ticket.id)}>
+                                        <S.TicketMeta>
+                                            <S.TicketMetaRow>
+                                                <S.TicketId>{ticket.id}</S.TicketId>
+                                                <S.TicketDate>{ticket.created_at.slice(0, 10)}</S.TicketDate>
+                                            </S.TicketMetaRow>
+                                            <S.TicketTitle>{ticket.title}</S.TicketTitle>
+                                        </S.TicketMeta>
+                                        <StatusBadge status={STATUS_LABEL[ticket.status] ?? ticket.status}/>
+                                    </S.TicketRow>
+                                ))}
+                            </S.TicketList>
+                        )}
                     </S.Card>
                 </S.ContentGrid>
 
