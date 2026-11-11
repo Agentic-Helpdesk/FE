@@ -26,6 +26,8 @@ export type TicketType = CreateTicketRequestType & {
     created_at: string
     status: TicketStatusType
     result: ClassifyResultType
+    reply_title?: string
+    reply_content?: string
 }
 
 export type SimilarTicketType = {

@@ -68,6 +68,7 @@ const RightSlot = styled.div`
 const NAV_LIST = [
     {label: '대시보드', path: '/dashboard'},
     {label: '내 문의', path: '/tickets'},
+    {label: '마이페이지', path: '/mypage'},
 ]
 
 function Navbar() {

@@ -1,5 +1,7 @@
+import {TicketDetail} from '../features/ticketDetail'
+
 function TicketDetailPage() {
-  return <div>TicketDetailPage</div>
+    return <TicketDetail />
 }
 
 export default TicketDetailPage

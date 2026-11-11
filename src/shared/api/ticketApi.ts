@@ -1,5 +1,6 @@
 import type {TicketType, CreateTicketRequestType, UpdateTicketStatusRequestType, SimilarTicketType} from '../types/ticket'
 import MOCK_TICKET_LIST from '../../mocks/ticketData'
+import MOCK_ASSIGNED_TICKET_LIST from '../../mocks/assignedTicketData'
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
@@ -23,7 +24,7 @@ export async function getTickets(): Promise<TicketType[]> {
 export async function getTicket(id: string): Promise<TicketType> {
     if (USE_MOCK) {
         await delay()
-        const ticket = mockStore.find((t) => t.id === id)
+        const ticket = mockStore.find((t) => t.id === id) ?? MOCK_ASSIGNED_TICKET_LIST.find((t) => t.id === id)
         if (!ticket) throw new Error(`티켓 ${id}를 찾을 수 없습니다`)
         return {...ticket}
     }
@@ -85,6 +86,17 @@ export async function searchSimilar(body: {title: string; content: string}): Pro
         body: JSON.stringify(body),
     })
     if (!res.ok) throw new Error('유사 티켓 검색 실패')
+    return res.json()
+}
+
+// GET /tickets/assigned (담당자로 배정된 티켓)
+export async function getAssignedTickets(): Promise<TicketType[]> {
+    if (USE_MOCK) {
+        await delay()
+        return [...MOCK_ASSIGNED_TICKET_LIST]
+    }
+    const res = await fetch(`${BASE_URL}/tickets/assigned`)
+    if (!res.ok) throw new Error('배정 티켓 조회 실패')
     return res.json()
 }
 

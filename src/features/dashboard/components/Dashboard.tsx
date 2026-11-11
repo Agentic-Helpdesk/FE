@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import * as S from './Dashboard.styles'
 import StatusBadge from '../../../shared/ui/StatusBadge'
-import {getTickets} from '../../../shared/api/ticketApi'
+import {getTickets, getAssignedTickets} from '../../../shared/api/ticketApi'
 import type {TicketType} from '../../../shared/types/ticket'
 
 const STATUS_LABEL: Record<string, string> = {
@@ -16,6 +16,7 @@ const DAY_NAME_LIST = ['일', '월', '화', '수', '목', '금', '토']
 function Dashboard() {
     const navigate = useNavigate()
     const [ticketList, setTicketList] = useState<TicketType[]>([])
+    const [assignedTicketList, setAssignedTicketList] = useState<TicketType[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
     const now = new Date()
@@ -26,13 +27,16 @@ function Dashboard() {
     const firstDayOfWeek = new Date(year, month, 1).getDay()
 
     useEffect(() => {
-        getTickets()
-            .then(setTicketList)
+        Promise.all([getTickets(), getAssignedTickets()])
+            .then(([tickets, assigned]) => {
+                setTicketList(tickets)
+                setAssignedTicketList(assigned)
+            })
             .finally(() => setIsLoading(false))
     }, [])
 
-    const myTicketList = ticketList.slice(0, 4)
-    const assignTicketList = ticketList.filter((t) => t.status !== 'resolved').slice(0, 3)
+    const myTicketList = ticketList.slice(0, 5)
+    const assignTicketList = assignedTicketList.slice(0, 3)
 
     const statList = [
         {label: '접수', count: ticketList.filter((t) => t.status === 'received').length, bgColor: '#f1f5f9', textColor: '#475569'},
@@ -45,6 +49,7 @@ function Dashboard() {
 
     const handleNewTicketClick = () => navigate('/tickets/new')
     const handleTicketClick = (id: string) => navigate(`/tickets/${id}`)
+    const handleAssignedTicketClick = (id: string) => navigate(`/tickets/${id}`, {state: {assigned: true}})
     const handleAllTicketClick = () => navigate('/tickets')
 
     const calendarLabel = `${year}년 ${month + 1}월`
@@ -125,7 +130,7 @@ function Dashboard() {
                         </S.CardHeader>
                         <S.AssignTicketList>
                             {assignTicketList.map((ticket) => (
-                                <S.AssignTicketRow key={ticket.id} onClick={() => handleTicketClick(ticket.id)}>
+                                <S.AssignTicketRow key={ticket.id} onClick={() => handleAssignedTicketClick(ticket.id)}>
                                     <S.AssignTicketId>{ticket.id}</S.AssignTicketId>
                                     <S.DeptBadge>{ticket.result.department}</S.DeptBadge>
                                     <S.AssignTicketTitle>{ticket.title}</S.AssignTicketTitle>

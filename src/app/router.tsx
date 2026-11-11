@@ -7,6 +7,7 @@ import TicketDetailPage from '../pages/TicketDetailPage'
 import TicketInputPage from '../pages/TicketInputPage'
 import LoginPage from '../pages/LoginPage'
 import JoinPage from '../pages/JoinPage'
+import MyPage from '../pages/MyPage'
 
 const router = createBrowserRouter([
     {path: '/', element: <LandingPage/>},
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
             {path: '/tickets', element: <TicketListPage/>},
             {path: '/tickets/new', element: <TicketInputPage/>},
             {path: '/tickets/:id', element: <TicketDetailPage/>},
+            {path: '/mypage', element: <MyPage/>},
         ],
     },
 ])
