@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'
+import ReactMarkdown from 'react-markdown'
 import {useNavigate, useParams, useLocation} from 'react-router-dom'
 import * as S from './TicketDetail.styles'
 import StatusBadge from '../../../shared/ui/StatusBadge'
@@ -95,7 +96,9 @@ function TicketDetail() {
                     </S.TicketCardTop>
 
                     <S.TicketTitle>{ticket.title}</S.TicketTitle>
-                    <S.TicketContent>{ticket.content}</S.TicketContent>
+                    <S.TicketContent>
+                        <ReactMarkdown>{ticket.content.replace(/\n/g, '  \n')}</ReactMarkdown>
+                    </S.TicketContent>
 
                     <S.TicketFooter>
                         <span>담당 부서: {ticket.result.department}</span>

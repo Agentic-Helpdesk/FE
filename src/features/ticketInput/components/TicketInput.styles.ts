@@ -93,8 +93,90 @@ export const TitleInput = styled.input`
     }
 `
 
+export const TabRow = styled.div`
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+`
+
+export const TabBtn = styled.button<{$active: boolean}>`
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    font-weight: ${({$active}) => $active ? '600' : '400'};
+    color: ${({$active}) => $active ? PRIMARY : '#6b7280'};
+    background: none;
+    border: none;
+    border-bottom: 2px solid ${({$active}) => $active ? PRIMARY : 'transparent'};
+    margin-bottom: -1px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover {
+        color: ${PRIMARY};
+    }
+`
+
+export const ToolbarRow = styled.div`
+    display: flex;
+    gap: 2px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+`
+
+export const ToolbarBtn = styled.button`
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    min-width: 32px;
+    transition: background 0.1s, border-color 0.1s;
+
+    &:hover {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+    }
+
+    &:active {
+        background: #eef2ff;
+        border-color: #5e81f4;
+        color: #5e81f4;
+    }
+`
+
+export const MarkdownPreview = styled.div`
+    min-height: 300px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+    color: #374151;
+    line-height: 1.6;
+    background: #f9fafb;
+
+    h1, h2, h3, h4, h5, h6 { font-weight: 700; margin: 0.75em 0 0.25em; color: #111827; }
+    h1 { font-size: 1rem; }
+    h2 { font-size: 0.9375rem; }
+    h3 { font-size: 0.875rem; }
+    p { margin: 0.5em 0; }
+    ul, ol { padding-left: 1.5em; margin: 0.5em 0; }
+    li { margin: 0.25em 0; }
+    code { background: #f3f4f6; padding: 1px 6px; border-radius: 4px; font-size: 0.8125rem; font-family: monospace; }
+    pre { background: #f3f4f6; padding: 12px; border-radius: 8px; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    blockquote { border-left: 3px solid #d1d5db; margin: 0.5em 0; padding-left: 12px; color: #6b7280; }
+    strong { font-weight: 700; color: #111827; }
+    a { color: ${PRIMARY}; text-decoration: underline; }
+    hr { border: none; border-top: 1px solid #e5e7eb; margin: 1em 0; }
+`
+
 export const ContentTextarea = styled.textarea`
     width: 100%;
+    min-height: 142px;
     padding: 12px 16px;
     border-radius: 12px;
     border: 1px solid #e5e7eb;
@@ -104,6 +186,7 @@ export const ContentTextarea = styled.textarea`
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
     resize: none;
+    overflow: hidden;
     box-sizing: border-box;
     line-height: 1.6;
 

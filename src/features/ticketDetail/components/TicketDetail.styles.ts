@@ -10,9 +10,11 @@ export const Page = styled.div`
 `
 
 export const Inner = styled.div`
-    max-width: 900px;
+    width: 100%;
+    max-width: 760px;
     margin: 0 auto;
     padding: 32px 24px;
+    box-sizing: border-box;
 `
 
 export const PageHeader = styled.div`
@@ -89,17 +91,35 @@ export const AutoFillBtn = styled.button`
 `
 
 export const TicketTitle = styled.h2`
-    font-size: 1.125rem;
+    font-size: 1.375rem;
     font-weight: 700;
     color: #111827;
-    margin-bottom: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
 `
 
-export const TicketContent = styled.p`
+export const TicketContent = styled.div`
     font-size: 0.875rem;
     color: #374151;
     line-height: 1.7;
-    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+
+    h1, h2, h3, h4, h5, h6 { font-weight: 700; margin: 0.75em 0 0.25em; color: #111827; }
+    h1 { font-size: 1rem; }
+    h2 { font-size: 0.9375rem; }
+    h3 { font-size: 0.875rem; }
+    p { margin: 0.5em 0; }
+    ul, ol { padding-left: 1.5em; margin: 0.5em 0; }
+    li { margin: 0.25em 0; }
+    code { background: #f3f4f6; padding: 1px 6px; border-radius: 4px; font-size: 0.8125rem; font-family: monospace; }
+    pre { background: #f3f4f6; padding: 12px; border-radius: 8px; overflow-x: auto; }
+    pre code { background: none; padding: 0; }
+    blockquote { border-left: 3px solid #d1d5db; margin: 0.5em 0; padding-left: 12px; color: #6b7280; }
+    strong { font-weight: 700; color: #111827; }
+    a { color: #5e81f4; text-decoration: underline; }
+    hr { border: none; border-top: 1px solid #e5e7eb; margin: 1em 0; }
 `
 
 export const TicketFooter = styled.div`
