@@ -128,6 +128,7 @@ export const TicketFooter = styled.div`
     gap: 16px;
     font-size: 0.8125rem;
     color: #9ca3af;
+    margin-top: 12px;
 `
 
 export const TwoColRow = styled.div`
